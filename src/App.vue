@@ -2,7 +2,7 @@
   <div id="app">
     <div class="loginPage" v-if="islogin">
       <div>
-        <a-tabs default-active-key="1" @change="callback">
+        <a-tabs default-active-key="1" @change="loginCallback">
           <a-tab-pane key="1" tab="ログイン"> </a-tab-pane>
           <a-tab-pane key="2" tab="アカウント作成" force-render> </a-tab-pane>
         </a-tabs>
@@ -23,8 +23,8 @@
           </a-input>
         </div>
         <div>
-          <a-button style="width: 40%; margin: 5%" type="primary">
-            登录
+          <a-button @click="quedin" style="width: 40%; margin: 5%" type="primary">
+            {{lgText}}
           </a-button>
           <a-button
             @click="quxiao"
@@ -74,15 +74,29 @@
 </template>
 
 <script>
+
 export default {
   name: "App",
   data() {
     return {
+      userName: "",
+      password: "",
+      lgText: "登录",
       current: ["home"],
       islogin: false,
     };
   },
   methods: {
+    quedin(){
+      let scret = this.$md5(this.password+'7777777');
+      console.log(this.userName);
+      console.log(this.password);
+      console.log(scret);
+    },
+    loginCallback(e) {
+      
+      this.lgText = e == 1 ? "登录" : "注册";
+    },
     caidan(e) {
       if (e["key"] == "home") {
         this.$router.push({ path: "/" });
