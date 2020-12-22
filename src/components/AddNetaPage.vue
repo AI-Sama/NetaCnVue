@@ -6,7 +6,6 @@
       </a-form-model-item>
 
       <a-form-model-item label="拼音">
-        
         <a-input v-model="form.pinyin" placeholder="多个拼音之间用空格隔开" />
         <div class="yinbiaozimu">
           <div class="yinbiaozu">
@@ -51,35 +50,7 @@
         <a-input v-model="form.jiaming" />
       </a-form-model-item>
       <a-form-model-item label="标签">
-        <div>
-          <template v-for="(tag, index) in tags">
-            <a-tag
-              :key="tag"
-              :closable="index !== 0"
-              @close="() => handleClose(tag)"
-            >
-              {{ tag }}
-            </a-tag>
-          </template>
-          <a-input
-            v-if="inputVisible"
-            ref="input"
-            type="text"
-            size="small"
-            :style="{ width: '78px' }"
-            :value="inputValue"
-            @change="handleInputChange"
-            @blur="handleInputConfirm"
-            @keyup.enter="handleInputConfirm"
-          />
-          <a-tag
-            v-else
-            style="background: #fff; borderstyle: dashed"
-            @click="showInput"
-          >
-            <a-icon type="plus" /> 新标签
-          </a-tag>
-        </div>
+        <a-button @click="showDrawer" icon="plus">新标签</a-button>
       </a-form-model-item>
       <a-form-model-item label="默认屏蔽">
         <div>
@@ -111,12 +82,78 @@
         <a-button style="margin-left: 10px"> 取消 </a-button>
       </a-form-model-item>
     </a-form-model>
+    <div>
+      <a-drawer
+        title="添加标签"
+        placement="right"
+        :closable="true"
+        :visible="drawer_visible"
+        :after-visible-change="afterVisibleChange"
+        @close="onClose"
+        width="500"
+      >
+        <div>
+          <template v-for="(tag, index) in tags">
+            <a-tag
+              :key="tag"
+              :closable="index !== 0"
+              @close="() => handleClose(tag)"
+            >
+              {{ tag }}
+            </a-tag>
+          </template>
+          <a-input
+            v-if="inputVisible"
+            ref="input"
+            type="text"
+            size="small"
+            :style="{ width: '78px' }"
+            :value="inputValue"
+            @change="handleInputChange"
+            @blur="handleInputConfirm"
+            @keyup.enter="handleInputConfirm"
+          />
+          <a-tag
+            v-else
+            style="background: #fff; borderstyle: dashed"
+            @click="showInput"
+          >
+            <a-icon type="plus" /> 新标签
+          </a-tag>
+        </div>
+        <a-divider />
+        <div>
+          <p>选择已有标签</p>
+          <a-input-search
+            placeholder="input search text"
+            style="width: 100%"
+            @search="onSearch"
+          />
+          <div>
+            <!-- </br></br> -->
+          </div>
+          <a-tag> pink </a-tag>
+          <a-tag> red </a-tag>
+          <a-tag> orange </a-tag>
+          <a-tag> green </a-tag>
+          <a-tag> cyan </a-tag>
+          <a-tag> blue </a-tag>
+          <a-tag> purple </a-tag>
+        </div>
+        <a-divider />
+        <div class="drawButton">
+          <a-button size="large" type="primary"> 确定 </a-button>
+          <a-button size="large"  type="danger"> 取消 </a-button>
+        </div>
+      </a-drawer>
+    </div>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      drawer_visible: false,
       tags: [],
       inputVisible: false,
       inputValue: "",
@@ -134,6 +171,9 @@ export default {
     };
   },
   methods: {
+    showDrawer() {
+      this.drawer_visible = true;
+    },
     handleClose(removedTag) {
       const tags = this.tags.filter((tag) => tag !== removedTag);
       console.log(tags);
@@ -160,6 +200,9 @@ export default {
         inputVisible: false,
         inputValue: "",
       });
+    },
+    onClose() {
+      this.drawer_visible = false;
     },
     onSubmit() {
       console.log("submit!", this.form);
@@ -197,6 +240,11 @@ export default {
 }
 .ybzimu:hover {
   border: #1890ff 1px solid;
-  color:  #1890ff;
+  color: #1890ff;
+}
+.drawButton{
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 </style>

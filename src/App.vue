@@ -38,34 +38,35 @@
     </div>
     <div id="head">
       <img src="@/assets/netacn.png" style="height: 25px" />
-      <a-tabs default-active-key="1" @change="callback" size="large">
-        <a-tab-pane key="1">
-          <span slot="tab">
-            <a-icon type="home" />
-            主页
-          </span>
-        </a-tab-pane>
-        <a-tab-pane key="2">
-          <span slot="tab">
-            <a-icon type="home" />
-            主页
-          </span>
-        </a-tab-pane>
-        <a-tab-pane key="3">
-          <span slot="tab">
-            <a-icon type="home" />
-            主页
-          </span>
-        </a-tab-pane>
-        <a-tab-pane key="4">
-          <span slot="tab">
-            <a-icon type="home" />
-            主页
-          </span>
-        </a-tab-pane>
-      </a-tabs>
       <div>
-        <a-button icon="login" type="primary" @click="login"> 登录 </a-button>
+        <a-menu v-model="current" mode="horizontal">
+          <a-menu-item  @click="caidan"  key="home"> <a-icon type="home" />主页 </a-menu-item>
+          <a-menu-item  @click="caidan" key="tags"> <a-icon type="tags" />标签 </a-menu-item>
+          <a-menu-item @click="caidan" key="plus"> <a-icon type="plus" />新增 </a-menu-item>
+          </router-link>
+          <!-- <a-sub-menu>
+            <span slot="title" class="submenu-title-wrapper"
+              ><a-icon type="global" />言语</span
+            >
+              <a-menu-item key="1"> 中文 </a-menu-item>
+              <a-menu-item key="2"> 日语 </a-menu-item>
+          </a-sub-menu> -->
+          <!-- <a-sub-menu>
+            <span slot="title" class="submenu-title-wrapper"
+              ><a-icon type="stop" />限制</span
+            >
+              <a-menu-item key="1"> 开启 </a-menu-item>
+              <a-menu-item key="2"> 关闭 </a-menu-item>
+          </a-sub-menu> -->
+        </a-menu>
+      </div>
+      <div>
+        <a-button icon="global">日语</a-button>
+        <a-button icon="stop">限制</a-button>
+        
+      </div>
+      <div>
+          <a @click="login"><a-avatar :size="50" icon="user" /></a>
       </div>
     </div>
     <router-view />
@@ -77,10 +78,21 @@ export default {
   name: "App",
   data() {
     return {
+      current: ["home"],
       islogin: false,
     };
   },
   methods: {
+    caidan(e) {
+      if (e["key"] == "home") {
+        this.$router.push({ path: "/" });
+      } else if (e["key"] == "tags") {
+        this.$router.push({ path: "/" });
+      } else if (e["key"] == "plus") {
+        this.$router.push({ path: "/AddNetaPage" });
+      }
+      // console.log(e);
+    },
     quxiao() {
       this.islogin = false;
     },
