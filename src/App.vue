@@ -74,7 +74,6 @@
 </template>
 
 <script>
-
 export default {
   name: "App",
   data() {
@@ -87,14 +86,24 @@ export default {
     };
   },
   methods: {
-    quedin(){
-      let scret = this.$md5(this.password+'7777777');
-      console.log(this.userName);
-      console.log(this.password);
-      console.log(scret);
+    quedin() {
+      if (this.lgText == "注册") {
+        var scret = this.$md5(this.password + "7777777");
+        this.$axios({
+          method: "post",
+          url: "http://localhost:8080/user/addUser",
+          data: {
+            userAccount: this.userName,
+            userPassword: scret,
+          },
+        }).then(function (response) {
+          console.log(response);
+        });
+      } else if (this.lgText == "登录") {
+        //todo 登录
+      }
     },
     loginCallback(e) {
-      
       this.lgText = e == 1 ? "登录" : "注册";
     },
     caidan(e) {
