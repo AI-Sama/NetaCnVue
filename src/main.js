@@ -11,6 +11,22 @@ Vue.prototype.$axios = axios;
 Vue.prototype.$md5 = md5;
 Vue.use(Antd);
 Vue.config.productionTip = false
+axios.interceptors.request.use(
+  config => {
+    if (localStorage.getItem('token')) {
+      //在请求头加入token
+      config.headers.token = localStorage.getItem('token');
+    }
+    return config;
+  });
+  axios.interceptors.response.use(
+    response => {
+     // 定时刷新access-token
+     if (response.data.resultCode == '-1') {
+         //token过期
+     }
+     return response
+    });
 
 /* eslint-disable no-new */
 new Vue({

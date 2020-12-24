@@ -14,13 +14,13 @@
           >
             <a-icon slot="prefix" type="user" />
           </a-input>
-          <a-input
+          <a-input-password
             style="margin-left: 5%; margin-top: 15px; width: 90%"
             v-model="password"
             placeholder="密码,只能包含字母数字"
           >
             <a-icon slot="prefix" type="lock" />
-          </a-input>
+          </a-input-password>
         </div>
         <div>
           <a-button @click="quedin" style="width: 40%; margin: 5%" type="primary">
@@ -85,7 +85,20 @@ export default {
       islogin: false,
     };
   },
+  mounted() {
+    if (!sessionStorage.getItem("user")) {
+      this.$axios({
+        method: "get",
+        url: "http://localhost:8080/user/getUserInfo",
+      }).then((response) => {
+        if (response.data.resultCode == 1) {
+          sessionStorage.setItem("user",response.data.resultData)
+        } 
+      });
+    }
+  },
   methods: {
+    getUserInfo() {},
     quedin() {
       if (this.lgText == "注册") {
         var scret = this.$md5(this.password + "7777777");
@@ -96,11 +109,43 @@ export default {
             userAccount: this.userName,
             userPassword: scret,
           },
-        }).then(function (response) {
-          console.log(response);
-        });
+        })
+          .then((response) => {
+            if (response.data.resultCode == 1) {
+              this.$message.success("注册成功");
+            } else if (response.data.resultCode == 0) {
+              this.$message.error("该账号已被注册");
+            }
+          })
+          .catch((error) => {
+            this.$message.error("注册失败，请稍后重试");
+          });
       } else if (this.lgText == "登录") {
         //todo 登录
+        var scret = this.$md5(this.password + "7777777");
+        this.$axios({
+          method: "post",
+          url: "http://localhost:8080/user/userLogin",
+          // method: "get",
+          // url: "http://localhost:8080/user/test",
+          data: {
+            userAccount: this.userName,
+            userPassword: scret,
+          },
+        })
+          .then((response) => {
+            console.log(response);
+            if (response.data.resultCode == 1) {
+              this.$message.success("登录成功");
+              sessionStorage.setItem("user", response.data.resultData);
+              localStorage.setItem("token", response.data.resultData.spare1);
+            } else if (response.data.resultCode == 0) {
+              this.$message.error("账号或密码错误");
+            }
+          })
+          .catch((error) => {
+            this.$message.error("登录失败，请稍后重试");
+          });
       }
     },
     loginCallback(e) {
