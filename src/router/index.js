@@ -4,6 +4,7 @@ import HomePage from '@/components/HomePage'
 import AddNetaPage from '@/components/AddNetaPage'
 import ShowPage from '@/components/ShowPage'
 import UserInfoPage from '@/components/UserInfoPage'
+
 Vue.use(Router)
 
 export default new Router({
