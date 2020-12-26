@@ -1,13 +1,12 @@
 <template>
   <div id="app">
-    <TopMenuPage></TopMenuPage>
+    <TopMenuPage />
     <router-view />
   </div>
 </template>
 
 <script>
 import TopMenuPage from "@/components/TopMenuPage";
-
 export default {
   name: "App",
   components: {
@@ -24,7 +23,7 @@ export default {
 <style>
 #app {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   flex-direction: column;
   width: 100%;
