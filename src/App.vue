@@ -72,7 +72,7 @@
           </template>
           <template slot="content">
             <div class="user_operate">
-              <a> 个人资料 </a>
+              <a @click="jump('/UserInfoPage')"> 个人资料 </a>
             </div>
             <div class="user_operate">
               <a> 网站管理 </a>
@@ -128,6 +128,9 @@ export default {
     }
   },
   methods: {
+    jump(page){
+      this.$router.push({path:page});
+    },
     login_out() {
       localStorage.removeItem("mydata");
       sessionStorage.removeItem("user");
@@ -162,8 +165,6 @@ export default {
         this.$axios({
           method: "post",
           url: "http://localhost:8080/user/userLogin",
-          // method: "get",
-          // url: "http://localhost:8080/user/test",
           data: {
             userAccount: this.userAccount,
             userPassword: scret,
@@ -179,7 +180,7 @@ export default {
               localStorage.setItem("mydata", response.data.resultData.spare1);
               this.userInfo = response.data.resultData;
               this.loginPage = false;
-              this.islogin = true;
+              this.islogin = true;  
             } else if (response.data.resultCode == 0) {
               this.$message.error("账号或密码错误");
               this.password = "";

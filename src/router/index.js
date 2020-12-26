@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HomePage from '@/components/HomePage'
 import AddNetaPage from '@/components/AddNetaPage'
 import ShowPage from '@/components/ShowPage'
+import UserInfoPage from '@/components/UserInfoPage'
 Vue.use(Router)
 
 export default new Router({
@@ -22,6 +23,11 @@ export default new Router({
       path: '/ShowPage',
       name: 'ShowPage',
       component: ShowPage
+    },
+    {
+      path: '/UserInfoPage',
+      name: 'UserInfoPage',
+      component: UserInfoPage
     }
   ]
 })
