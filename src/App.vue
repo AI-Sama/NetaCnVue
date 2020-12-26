@@ -63,6 +63,8 @@
         <a-popover v-if="this.islogin" placement="bottom">
           <template slot="title">
             <div style="color: red; text-align: center">
+              Lv.
+              {{ userInfo.userLevel }}
               {{
                 userInfo.userName == null
                   ? userInfo.userAccount
@@ -81,10 +83,11 @@
               <a @click="login_out"> 退出登录 </a>
             </div>
           </template>
-          <a @click="headClick"><a-avatar :size="63" icon="user" /></a>
+          <a @click="headClick"><a-avatar :size="63" icon="user" :src="userInfo.headImg"  /></a>
+         
         </a-popover>
         <a v-if="!this.islogin" @click="headClick"
-          ><a-avatar :size="63" icon="user"
+          ><a-avatar :size="63" icon="user" :src="userInfo.headImg"
         /></a>
       </div>
     </div>
@@ -128,8 +131,8 @@ export default {
     }
   },
   methods: {
-    jump(page){
-      this.$router.push({path:page});
+    jump(page) {
+      this.$router.push({ path: page });
     },
     login_out() {
       localStorage.removeItem("mydata");
@@ -180,7 +183,7 @@ export default {
               localStorage.setItem("mydata", response.data.resultData.spare1);
               this.userInfo = response.data.resultData;
               this.loginPage = false;
-              this.islogin = true;  
+              this.islogin = true;
             } else if (response.data.resultCode == 0) {
               this.$message.error("账号或密码错误");
               this.password = "";

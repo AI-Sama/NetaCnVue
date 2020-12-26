@@ -1,13 +1,14 @@
 <template>
   <div class="user_info_page">
-    <div>
-      <a-avatar :size="150" icon="user" />
+    <div style="margin: auto">
+      <a-avatar :size="150" icon="user" :src="user_form.headImg" />
     </div>
     <a-divider />
     <a-form-model
       :model="user_form"
       :label-col="labelCol"
       :wrapper-col="wrapperCol"
+      :disabled="true"
     >
       <a-form-model-item label="账号">
         {{ user_form.userAccount }}
@@ -15,57 +16,136 @@
 
       <a-form-model-item label="昵称">
         <a-input
+          v-if="is_edit"
           v-model="user_form.userName"
-          placeholder="多个拼音之间用空格隔开"
+          :disabled="disalbed"
         />
+        <span v-if="!is_edit">{{ user_form.userName }}</span>
       </a-form-model-item>
       <a-form-model-item label="限制">
         <div>
           <a-switch
-            v-model="user_form.pinbi"
+            v-model="user_form.wordLimit"
             checked-children="开"
             un-checked-children="关"
+            :disabled="disalbed"
           />
         </div>
       </a-form-model-item>
       <a-form-model-item label="语言">
         <div>
           <a-switch
-            v-model="user_form.language"
+            v-model="user_form.userLanguage"
             checked-children="日"
             un-checked-children="中"
+            :disabled="disalbed"
           />
         </div>
       </a-form-model-item>
     </a-form-model>
+    <a-divider />
+    <div class="button_block">
+      <div>
+        <a-button v-if="!is_edit" @click="edit_button" icon="edit"
+          >修改</a-button
+        >
+      </div>
+      <div>
+        <a-button v-if="is_edit" @click="save_button" icon="edit"
+          >保存</a-button
+        >
+      </div>
+      <div>
+        <a-button v-if="is_edit" @click="cancel_button" icon="edit"
+          >取消</a-button
+        >
+      </div>
+    </div>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      is_edit: false,
+      disalbed: true,
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
       user_form: {
-        userAccount: "11",
+        userAccount: "",
         userName: "",
-        pinbi: 0,
-        language: 0,
+        wordLimit: false,
+        userLanguage: false,
       },
     };
   },
   mounted() {
-    let user = JSON.parse(sessionStorage.getItem("user"));
-    this.user_form.userAccount = user.userAccount;
-    if (!user.userName) {
-      this.user_form.userName = user.userAccount;
+    if (!sessionStorage.getItem("user")) {
+      this.$axios({
+        method: "get",
+        url: "http://localhost:8080/user/getUserInfo",
+      }).then((response) => {
+        if (response.data.resultCode == 1) {
+          sessionStorage.setItem(
+            "user",
+            JSON.stringify(response.data.resultData)
+          );
+          this.$forceUpdate();
+          this.data_push();
+        }
+      });
     } else {
-      this.user_form.userName = user.userName;
+      this.data_push();
     }
-    this.user_form.pinbi = user.wordLimit;
-    this.user_form.language = user.userLanguage;
   },
-  methods: {},
+  methods: {
+    data_push() {
+      let user = JSON.parse(sessionStorage.getItem("user"));
+      this.user_form.userAccount = user.userAccount;
+      if (!user.userName) {
+        this.user_form.userName = user.userAccount;
+      } else {
+        this.user_form.userName = user.userName;
+      }
+      this.user_form.wordLimit = user.wordLimit == 0 ? false : true;
+      this.user_form.userLanguage = user.userLanguage == 0 ? false : true;
+      this.user_form.headImg = user.headImg;
+    },
+    edit_button() {
+      this.is_edit = true;
+      this.disalbed = false;
+    },
+    save_button() {
+      this.$axios({
+        method: "post",
+        url: "http://localhost:8080/user/updateUser",
+        data: {
+          userAccount: this.user_form.userAccount,
+          userName: this.user_form.userName,
+          wordLimit: this.user_form.wordLimit == true ? 1 : 0,
+          userLanguage: this.user_form.userLanguage == true ? 1 : 0,
+        },
+      })
+        .then((response) => {
+          if (response.data.resultCode == 1) {
+            this.$message.success("修改成功");
+            sessionStorage.removeItem("user");
+            this.is_edit = false;
+            this.disalbed = true;
+          } else if (response.data.resultCode == 0) {
+          }
+        })
+        .catch((error) => {
+          this.$message.error("操作失败,请稍后重试");
+          this.cancel_button();
+        });
+    },
+    cancel_button() {
+      this.data_push();
+      this.is_edit = false;
+      this.disalbed = true;
+    },
+  },
 };
 </script>
 <style>
@@ -78,5 +158,11 @@ export default {
   background-color: white;
   box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   border-radius: 5px;
+}
+.button_block {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
 }
 </style>
