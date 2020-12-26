@@ -9,13 +9,14 @@ import md5 from 'js-md5';
 import axios from 'axios';
 Vue.prototype.$axios = axios;
 Vue.prototype.$md5 = md5;
+Vue.prototype.islogin = false;
 Vue.use(Antd);
 Vue.config.productionTip = false
 axios.interceptors.request.use(
   config => {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('mydata')) {
       //在请求头加入token
-      config.headers.token = localStorage.getItem('token');
+      config.headers.token = localStorage.getItem('mydata');
     }
     return config;
   });
