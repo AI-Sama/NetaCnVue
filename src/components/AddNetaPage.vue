@@ -128,15 +128,16 @@
             style="width: 100%"
             @search="onSearch"
           />
-          <div style="width: 100%; height: 20px">
-          </div>
-          <a-tag> pink </a-tag>
-          <a-tag> red </a-tag>
-          <a-tag> orange </a-tag>
-          <a-tag> green </a-tag>
-          <a-tag> cyan </a-tag>
-          <a-tag> blue </a-tag>
-          <a-tag> purple </a-tag>
+          <div style="width: 100%; height: 20px" />
+          <a-tag
+            v-for="(showtag, index) in show_tags"
+            @click="label_click(showtag)"
+            :key="index"
+            ant-click-animating-without-extra-node="true"
+            :color="showtag.spare1 == null ? '#bdc3c7' : showtag.spare1"
+          >
+            {{ showtag.cnWord }}
+          </a-tag>
         </div>
         <a-divider />
         <div class="drawButton">
@@ -153,6 +154,7 @@ export default {
     return {
       drawer_visible: false,
       tags: [],
+      show_tags: [],
       inputVisible: false,
       inputValue: "",
       labelCol: { span: 4 },
@@ -169,7 +171,11 @@ export default {
     };
   },
   methods: {
-    onSearch(){
+    label_click(showtag) {
+      showtag.spare1=showtag.spare1 == null ? "#108ee9" : "#bdc3c7";
+      this.$forceUpdate();
+    },
+    onSearch() {
       alert("查找");
     },
     showDrawer() {
@@ -179,7 +185,12 @@ export default {
         url: "http://localhost:8080/label/getLabels",
       }).then((response) => {
         if (response.data.resultCode == 1) {
-          console.log(response)
+          var arr = response.data.resultData;
+          for (var x = 0; x < arr.length; x++) {
+            this.show_tags[x] = arr[x];
+          }
+          this.$forceUpdate();
+          console.log(this.show_tags);
         }
       });
     },
