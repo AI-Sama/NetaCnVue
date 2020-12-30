@@ -88,7 +88,6 @@
         placement="right"
         :closable="true"
         :visible="drawer_visible"
-        :after-visible-change="afterVisibleChange"
         @close="onClose"
         width="500"
       >
@@ -129,8 +128,7 @@
             style="width: 100%"
             @search="onSearch"
           />
-          <div style="width:100%;height:20px">
-            <!-- </br></br> -->
+          <div style="width: 100%; height: 20px">
           </div>
           <a-tag> pink </a-tag>
           <a-tag> red </a-tag>
@@ -143,7 +141,7 @@
         <a-divider />
         <div class="drawButton">
           <a-button size="large" type="primary"> 确定 </a-button>
-          <a-button size="large"  type="danger"> 取消 </a-button>
+          <a-button size="large" type="danger"> 取消 </a-button>
         </div>
       </a-drawer>
     </div>
@@ -171,8 +169,19 @@ export default {
     };
   },
   methods: {
+    onSearch(){
+      alert("查找");
+    },
     showDrawer() {
       this.drawer_visible = true;
+      this.$axios({
+        method: "get",
+        url: "http://localhost:8080/label/getLabels",
+      }).then((response) => {
+        if (response.data.resultCode == 1) {
+          console.log(response)
+        }
+      });
     },
     handleClose(removedTag) {
       const tags = this.tags.filter((tag) => tag !== removedTag);
@@ -242,7 +251,7 @@ export default {
   border: #1890ff 1px solid;
   color: #1890ff;
 }
-.drawButton{
+.drawButton {
   position: absolute;
   bottom: 10px;
   right: 10px;
