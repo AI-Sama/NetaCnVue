@@ -93,11 +93,7 @@
       >
         <div>
           <template v-for="(tag, index) in tags">
-            <a-tag
-              :key="tag"
-              :closable="index !== 0"
-              @close="() => handleClose(tag)"
-            >
+            <a-tag :key="tag" :closable="true" @close="() => handleClose(tag)">
               {{ tag }}
             </a-tag>
           </template>
@@ -124,7 +120,8 @@
         <div>
           <p>选择已有标签</p>
           <a-input-search
-            placeholder="input search text"
+            v-model="search_word"
+            placeholder="搜索标签"
             style="width: 100%"
             @search="onSearch"
           />
@@ -134,7 +131,6 @@
             @click="label_click(showtag)"
             :key="index"
             ant-click-animating-without-extra-node="true"
-            :color="showtag.spare1 == null ? '#bdc3c7' : showtag.spare1"
           >
             {{ showtag.cnWord }}
           </a-tag>
@@ -152,6 +148,7 @@
 export default {
   data() {
     return {
+      search_word: "",
       drawer_visible: false,
       tags: [],
       show_tags: [],
@@ -172,11 +169,35 @@ export default {
   },
   methods: {
     label_click(showtag) {
-      showtag.spare1=showtag.spare1 == null ? "#108ee9" : "#bdc3c7";
+      var havatag = false;
+      for (var x = 0; x < this.tags.length; x++) {
+        if (this.tags[x] == showtag.cnWord) {
+          havatag = true;
+          break;
+        }
+      }
+      if (!havatag) {
+        this.tags[this.tags.length] = showtag.cnWord;
+      }
       this.$forceUpdate();
     },
     onSearch() {
-      alert("查找");
+      this.$axios({
+        method: "get",
+        url: "http://localhost:8080/label/getLabel",
+        params: {
+          labelName: this.search_word,
+        },
+      }).then((response) => {
+        if (response.data.resultCode == 1) {
+          var arr = response.data.resultData;
+          this.show_tags = [];
+          for (var x = 0; x < arr.length; x++) {
+            this.show_tags[x] = arr[x];
+          }
+          this.$forceUpdate();
+        }
+      });
     },
     showDrawer() {
       this.drawer_visible = true;
@@ -190,7 +211,6 @@ export default {
             this.show_tags[x] = arr[x];
           }
           this.$forceUpdate();
-          console.log(this.show_tags);
         }
       });
     },
@@ -200,10 +220,14 @@ export default {
       this.tags = tags;
     },
     showInput() {
-      this.inputVisible = true;
-      this.$nextTick(function () {
-        this.$refs.input.focus();
-      });
+      if (this.tags.length < 5) {
+        this.inputVisible = true;
+        this.$nextTick(function () {
+          this.$refs.input.focus();
+        });
+      } else {
+        alert("标签最多只能添加五个");
+      }
     },
     handleInputChange(e) {
       this.inputValue = e.target.value;
