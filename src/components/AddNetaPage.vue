@@ -8,41 +8,8 @@
       <a-form-model-item label="拼音">
         <a-input v-model="form.pinyin" placeholder="多个拼音之间用空格隔开" />
         <div class="yinbiaozimu">
-          <div class="yinbiaozu">
-            <div class="ybzimu">ā</div>
-            <div class="ybzimu">á</div>
-            <div class="ybzimu">ǎ</div>
-            <div class="ybzimu">à</div>
-          </div>
-          <div class="yinbiaozu">
-            <div class="ybzimu">ō</div>
-            <div class="ybzimu">ó</div>
-            <div class="ybzimu">ǒ</div>
-            <div class="ybzimu">ò</div>
-          </div>
-          <div class="yinbiaozu">
-            <div class="ybzimu">ē</div>
-            <div class="ybzimu">é</div>
-            <div class="ybzimu">ě</div>
-            <div class="ybzimu">è</div>
-          </div>
-          <div class="yinbiaozu">
-            <div class="ybzimu">ī</div>
-            <div class="ybzimu">í</div>
-            <div class="ybzimu">ǐ</div>
-            <div class="ybzimu">ì</div>
-          </div>
-          <div class="yinbiaozu">
-            <div class="ybzimu">ū</div>
-            <div class="ybzimu">ú</div>
-            <div class="ybzimu">ǔ</div>
-            <div class="ybzimu">ù</div>
-          </div>
-          <div class="yinbiaozu">
-            <div class="ybzimu">ǖ</div>
-            <div class="ybzimu">ǘ</div>
-            <div class="ybzimu">ǚ</div>
-            <div class="ybzimu">ǜ</div>
+          <div class="yinbiaozu" v-for="(zu,x) in yb">
+            <div class="ybzimu"  v-for="(ge,y) in zu" @click="ybclick(ge)">{{ge}}</div>
           </div>
         </div>
       </a-form-model-item>
@@ -50,7 +17,15 @@
         <a-input v-model="form.jiaming" />
       </a-form-model-item>
       <a-form-model-item label="标签">
-        <a-button @click="showDrawer" icon="plus">新标签</a-button>
+        <template v-for="(tag, index) in tags">
+            <a-tag
+              :key="tag"
+              color="#2db7f5"
+            >
+              {{ tag }}
+            </a-tag>
+          </template>
+        <a-button @click="showDrawer" icon="plus" size="small">新标签</a-button>
       </a-form-model-item>
       <a-form-model-item label="默认屏蔽">
         <div>
@@ -61,13 +36,13 @@
           />
         </div>
       </a-form-model-item>
-      <a-form-model-item label="出现日期">
+      <a-form-model-item label="出现日期(可留空)">
         <a-input-group compact>
           <a-input v-model="form.nian" style="width: 20%" placeholder="年" />
           <a-input
             v-model="form.yue"
             style="width: 20%"
-            placeholder="月,可留空"
+            placeholder="月"
           />
         </a-input-group>
       </a-form-model-item>
@@ -93,7 +68,12 @@
       >
         <div>
           <template v-for="(tag, index) in tags">
-            <a-tag :key="tag" :closable="true" @close="() => handleClose(tag)">
+            <a-tag
+              :key="tag"
+              :closable="true"
+              @close="() => handleClose(tag)"
+              color="#2db7f5"
+            >
               {{ tag }}
             </a-tag>
           </template>
@@ -135,11 +115,6 @@
             {{ showtag.cnWord }}
           </a-tag>
         </div>
-        <a-divider />
-        <div class="drawButton">
-          <a-button size="large" type="primary"> 确定 </a-button>
-          <a-button size="large" type="danger"> 取消 </a-button>
-        </div>
       </a-drawer>
     </div>
   </div>
@@ -148,6 +123,14 @@
 export default {
   data() {
     return {
+      yb:[
+        ["ā","á","ǎ","à"],
+        ["ō","ó","ǒ","ò"],
+        ["ē","é","ě","è"],
+        ["ī","í","ǐ","ì"],
+        ["ū","ú","ǔ","ù"],
+        ["ǖ","ǘ","ǚ","ǜ"]
+      ],
       search_word: "",
       drawer_visible: false,
       tags: [],
@@ -168,6 +151,9 @@ export default {
     };
   },
   methods: {
+    ybclick(ybzimu){
+      this.form.pinyin+=ybzimu;
+    },
     label_click(showtag) {
       var havatag = false;
       for (var x = 0; x < this.tags.length; x++) {
@@ -200,6 +186,7 @@ export default {
       });
     },
     showDrawer() {
+      console.log(this.yb);
       this.drawer_visible = true;
       this.$axios({
         method: "get",
@@ -285,10 +272,5 @@ export default {
 .ybzimu:hover {
   border: #1890ff 1px solid;
   color: #1890ff;
-}
-.drawButton {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
 }
 </style>
