@@ -8,11 +8,14 @@
     </div>
     <div class="ciyu">
       <div class="wenzi">
-        <ruby> 文<rt>wen</rt>字<rt>zi</rt></ruby>
+        <ruby> 
+          {{netaData.netaWord}}
+          <rt>{{netaData.pinyin}}</rt>
+          </ruby>
       </div>
       <div class="jiaming">
         <span> 假名注音: </span>
-        <span> もんじ </span>
+        <span> {{netaData.katakana}} </span>
       </div>
     </div>
     <a-divider />
@@ -23,15 +26,16 @@
       <a-tag color="#108ee9"> #108ee9 </a-tag>
     </div>
     <a-divider />
-    <div>出现日期：2020</div>
+     <div v-if="netaData.netaDate">出现日期：{{parseInt(netaData.netaDate/100)}} 年 {{parseInt(netaData.netaDate%100)}} 月 </div>
+     <div v-if="!netaData.netaDate">出现日期：不明 </div>
     <a-divider />
     <div>
       <a-collapse v-model="activeKey">
         <a-collapse-panel key="1" header="中文释义">
-          <p>{{ text }}</p>
+          <p>{{ netaData.cnExplanation }}</p>
         </a-collapse-panel>
         <a-collapse-panel key="2" header="日语释义">
-          <p>{{ text }}</p>
+          <p>{{ netaData.jpExplanation }}</p>
         </a-collapse-panel>
       </a-collapse>
     </div>
@@ -51,15 +55,33 @@
 export default {
   data() {
     return {
-      text: `这是中文释义`,
+      netaData:{},
       activeKey: ["1","2"],
     };
+  },
+  created(){
+    let id=this.$route.query.netaId;
+    this.$axios({
+      method:"get",
+      url:"http://localhost:8080/neta/selectFullNeta",
+      params:{
+        netaId:id,
+      },
+    }).then((response)=>{
+      if(response.data.resultCode==1){
+         console.log(response)
+        this.netaData=response.data.resultData;
+      }
+    });
   },
   watch: {
     activeKey(key) {
       console.log(key);
     },
   },
+  methods:{
+
+  }
 };
 </script>
 <style>

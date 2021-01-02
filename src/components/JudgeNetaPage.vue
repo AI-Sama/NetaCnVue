@@ -20,7 +20,9 @@
         </ruby>
       </div>
       <div>
-        <a-button type="primary"> 详情 </a-button>
+        <a-button type="primary" @click="jumpDetails(w.netaId)">
+          详情
+        </a-button>
       </div>
     </div>
   </div>
@@ -51,13 +53,20 @@ export default {
     });
   },
   methods: {
+    jumpDetails(id) {
+      this.$router.push({
+        path: "/ShowPage",
+        query: {
+          netaId: id,
+        },
+      });
+    },
     allcheck() {
       for (let x = 0; x < this.checkList.length; x++) {
         this.checkList[x] = !this.qx;
       }
     },
-    onChange(i) {
-    },
+    onChange(i) {},
   },
 };
 </script>
