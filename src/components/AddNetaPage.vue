@@ -1,55 +1,78 @@
 <template>
   <div class="myform">
     <a-form-model :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
-      <a-form-model-item label="词语">
-        <a-input v-model="form.name" />
+      <a-form-model-item label="词语" required>
+        <a-input v-model="form.netaWord" />
       </a-form-model-item>
 
-      <a-form-model-item label="拼音">
-        <a-input v-model="form.pinyin" placeholder="多个拼音之间用空格隔开" />
+      <a-form-model-item label="拼音" required>
+        <a-input
+          id="pinyin"
+          v-model="form.pinyin"
+          placeholder="多个拼音之间用空格隔开"
+        />
         <div class="yinbiaozimu">
-          <div class="yinbiaozu" v-for="(zu,x) in yb">
-            <div class="ybzimu"  v-for="(ge,y) in zu" @click="ybclick(ge)">{{ge}}</div>
+          <div class="yinbiaozu" v-for="(zu, x) in yb">
+            <div class="ybzimu" v-for="(ge, y) in zu" @click="ybclick(ge)">
+              {{ ge }}
+            </div>
           </div>
         </div>
       </a-form-model-item>
-      <a-form-model-item label="音译假名">
-        <a-input v-model="form.jiaming" />
+      <a-form-model-item label="音译假名" required>
+        <a-input v-model="form.katakana" />
       </a-form-model-item>
       <a-form-model-item label="标签">
         <template v-for="(tag, index) in tags">
-            <a-tag
-              :key="tag"
-              color="#2db7f5"
-            >
-              {{ tag }}
-            </a-tag>
-          </template>
+          <a-tag :key="tag" color="#2db7f5">
+            {{ tag }}
+          </a-tag>
+        </template>
         <a-button @click="showDrawer" icon="plus" size="small">新标签</a-button>
       </a-form-model-item>
       <a-form-model-item label="默认屏蔽">
         <div>
           <a-switch
-            v-model="form.pinbi"
+            v-model="form.wordShield"
             checked-children="开"
             un-checked-children="关"
           />
         </div>
       </a-form-model-item>
-      <a-form-model-item label="出现日期(可留空)">
+      <a-form-model-item label="出现日期">
         <a-input-group compact>
-          <a-input v-model="form.nian" style="width: 20%" placeholder="年" />
-          <a-input
+          <a-select
+            v-model="form.nian"
+            style="width: 15%"
+            @change="handleChange"
+          >
+            <a-select-option
+              v-for="(n, index) in yearSelect"
+              :value="n"
+              :key="n"
+            >
+              {{ n }}
+            </a-select-option>
+          </a-select>
+          <a-select
             v-model="form.yue"
-            style="width: 20%"
-            placeholder="月"
-          />
+            style="width: 12%"
+            @change="handleChange"
+          >
+            <a-select-option
+              v-for="(y, index) in monthSelect"
+              :value="y"
+              :key="y"
+            >
+              {{ y }}
+            </a-select-option>
+          </a-select>
         </a-input-group>
       </a-form-model-item>
-      <a-form-model-item label="中文释义">
+      <a-form-model-item label="中文释义" required>
         <a-input v-model="form.cnExplanation" type="textarea" />
       </a-form-model-item>
-      <a-form-model-item label="日语释义">
+      <a-form-model-item label="日语释义" required>
         <a-input v-model="form.jpExplanation" type="textarea" />
       </a-form-model-item>
       <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
@@ -123,13 +146,15 @@
 export default {
   data() {
     return {
-      yb:[
-        ["ā","á","ǎ","à"],
-        ["ō","ó","ǒ","ò"],
-        ["ē","é","ě","è"],
-        ["ī","í","ǐ","ì"],
-        ["ū","ú","ǔ","ù"],
-        ["ǖ","ǘ","ǚ","ǜ"]
+      yearSelect: [],
+      monthSelect: [],
+      yb: [
+        ["ā", "á", "ǎ", "à"],
+        ["ō", "ó", "ǒ", "ò"],
+        ["ē", "é", "ě", "è"],
+        ["ī", "í", "ǐ", "ì"],
+        ["ū", "ú", "ǔ", "ù"],
+        ["ǖ", "ǘ", "ǚ", "ǜ"],
       ],
       search_word: "",
       drawer_visible: false,
@@ -140,19 +165,38 @@ export default {
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
       form: {
-        name: "",
+        wordShield: false,
+        netaWord: "",
         pinyin: "",
-        jiaming: "",
-        nian: "",
-        yue: "",
+        katakana: "",
+        nian: "年",
+        yue: "月",
         cnExplanation: "",
         jpExplanation: "",
       },
     };
   },
+  created() {
+    let date = new Date();
+    let yearNum = date.getFullYear();
+    let num = 0;
+    for (let x = yearNum; x > yearNum - 10; x--) {
+      this.yearSelect[num++] = x;
+    }
+    for (let x = 1; x <= 12; x++) {
+      if (x < 10) {
+        this.monthSelect[x - 1] = "0" + x;
+      } else {
+        this.monthSelect[x - 1] = x;
+      }
+    }
+  },
   methods: {
-    ybclick(ybzimu){
-      this.form.pinyin+=ybzimu;
+    handleChange() {},
+    ybclick(ybzimu) {
+      this.form.pinyin += ybzimu;
+      let pyinput = document.getElementById("pinyin");
+      pyinput.focus();
     },
     label_click(showtag) {
       var havatag = false;
@@ -236,7 +280,37 @@ export default {
       this.drawer_visible = false;
     },
     onSubmit() {
+      let label="";
+      for(let x=0;x<this.tags.length;x++){
+        label+=this.tags[x];
+        if(x!=this.tags.length-1){
+          label+="|";
+        }
+      }
+      let netaData={
+        netaWord:this.form.netaWord,
+        pinyin:this.form.pinyin,
+        katakana:this.form.katakana,
+        netaLabel:label,
+        wordShield:this.form.wordShield?1:0,
+        netaDate:parseInt(this.form.nian+""+this.form.yue),
+        cnExplanation:this.form.cnExplanation,
+        jpExplanation:this.form.jpExplanation,
+      };
       console.log("submit!", this.form);
+      this.$axios({
+        method: "post",
+        url: "http://localhost:8080/neta/addNeta",
+        data: netaData,
+      })
+        .then((response) => {
+          if (response.data.resultCode == 1) {
+            console.log(response);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
 };
