@@ -4,7 +4,7 @@ import HomePage from '@/components/HomePage'
 import AddNetaPage from '@/components/AddNetaPage'
 import ShowPage from '@/components/ShowPage'
 import UserInfoPage from '@/components/UserInfoPage'
-
+import JudgeNetaPage from '@/components/JudgeNetaPage'
 Vue.use(Router)
 
 export default new Router({
@@ -29,6 +29,11 @@ export default new Router({
       path: '/UserInfoPage',
       name: 'UserInfoPage',
       component: UserInfoPage
+    },
+    {
+      path: '/JudgeNetaPage',
+      name: 'JudgeNetaPage',
+      component: JudgeNetaPage
     }
   ]
 })

@@ -194,8 +194,12 @@ export default {
   methods: {
     handleChange() {},
     ybclick(ybzimu) {
-      this.form.pinyin += ybzimu;
       let pyinput = document.getElementById("pinyin");
+      let start = pyinput.selectionStart;
+      let end = pyinput.selectionEnd;
+      let subStart = this.form.pinyin.substring(0, start);
+      let subEnd = this.form.pinyin.substring(end);
+      this.form.pinyin = subStart + ybzimu + subEnd;
       pyinput.focus();
     },
     label_click(showtag) {
@@ -280,22 +284,22 @@ export default {
       this.drawer_visible = false;
     },
     onSubmit() {
-      let label="";
-      for(let x=0;x<this.tags.length;x++){
-        label+=this.tags[x];
-        if(x!=this.tags.length-1){
-          label+="|";
+      let label = "";
+      for (let x = 0; x < this.tags.length; x++) {
+        label += this.tags[x];
+        if (x != this.tags.length - 1) {
+          label += "|";
         }
       }
-      let netaData={
-        netaWord:this.form.netaWord,
-        pinyin:this.form.pinyin,
-        katakana:this.form.katakana,
-        netaLabel:label,
-        wordShield:this.form.wordShield?1:0,
-        netaDate:parseInt(this.form.nian+""+this.form.yue),
-        cnExplanation:this.form.cnExplanation,
-        jpExplanation:this.form.jpExplanation,
+      let netaData = {
+        netaWord: this.form.netaWord,
+        pinyin: this.form.pinyin,
+        katakana: this.form.katakana,
+        netaLabel: label,
+        wordShield: this.form.wordShield ? 1 : 0,
+        netaDate: parseInt(this.form.nian + "" + this.form.yue),
+        cnExplanation: this.form.cnExplanation,
+        jpExplanation: this.form.jpExplanation,
       };
       console.log("submit!", this.form);
       this.$axios({

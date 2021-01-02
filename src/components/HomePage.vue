@@ -1,21 +1,21 @@
 <template>
   <div id="center">
     <div class="shaixuan">
-        <div>排序方式:&nbsp;&nbsp;&nbsp;</div>
-        <div>
+      <div>排序方式:&nbsp;&nbsp;&nbsp;</div>
+      <div>
         <a-select
-            default-value="lucy"
-            style="width: 120px"
-            @change="handleChange"
+          default-value="lucy"
+          style="width: 120px"
+          @change="handleChange"
         >
-        <a-select-option value="jack"> 按上传时间 </a-select-option>
-        <a-select-option value="lucy"> 按诞生时间 </a-select-option>
-        <a-select-option value="Yiminghe"> 按热度 </a-select-option>
-      </a-select>
-      &nbsp;&nbsp;&nbsp;
+          <a-select-option value="jack"> 按上传时间 </a-select-option>
+          <a-select-option value="lucy"> 按诞生时间 </a-select-option>
+          <a-select-option value="Yiminghe"> 按热度 </a-select-option>
+        </a-select>
+        &nbsp;&nbsp;&nbsp;
       </div>
       <div>
-            <a-pagination simple :default-current="2" :total="50" />
+        <a-pagination simple :default-current="2" :total="50" />
       </div>
     </div>
     <div class="gezhi">
@@ -91,14 +91,14 @@
 }
 
 .shaixuan {
-    padding: 20px;
+  padding: 20px;
   display: flex;
   align-items: center;
   width: 1000px;
   height: 50px;
   margin: 1%;
   overflow: hidden;
- box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   border-radius: 5px;
   background-color: white;
 }
