@@ -6,14 +6,14 @@
         Aldnoah
       </div>
     </div>
-    <div class="ciyu">
+    <div class="cyxq">
       <div class="wenzi">
         <ruby> 
           {{netaData.netaWord}}
           <rt>{{netaData.pinyin}}</rt>
           </ruby>
       </div>
-      <div class="jiaming">
+      <div class="katakana">
         <span> 假名注音: </span>
         <span> {{netaData.katakana}} </span>
       </div>
@@ -109,7 +109,7 @@ export default {
   background-color: #f39c12;
   border-radius: 0 0 5px 5px;
 }
-.ciyu {
+.cyxq {
   width: 100%;
 }
 .wenzi {
@@ -117,7 +117,7 @@ export default {
   font-size: 4em;
   font-weight: bold;
 }
-.jiaming {
+.katakana {
   color: black;
   font-size: 1em;
   font-weight: bold;

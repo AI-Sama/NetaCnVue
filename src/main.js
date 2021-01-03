@@ -23,7 +23,10 @@ axios.interceptors.request.use(
   axios.interceptors.response.use(
     response => {
      // 定时刷新access-token
-     if (response.data.resultCode == '-1') {
+     if (response.data.resultCode == '-2') {
+      localStorage.removeItem("mydata");
+      sessionStorage.removeItem("user");
+      alert("账号验证已过期，请退出后重新登陆");
          //token过期
      }
      return response
