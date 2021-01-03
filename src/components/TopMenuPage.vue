@@ -153,9 +153,9 @@ export default {
         })
           .then((response) => {
             if (response.data.resultCode == 1) {
-              this.$message.success("注册成功");
+             alert("注册成功");
             } else if (response.data.resultCode == 0) {
-              this.$message.error("该账号已被注册");
+              alert("该账号已被注册");
             }
           })
           .catch((error) => {

@@ -309,7 +309,10 @@ export default {
       })
         .then((response) => {
           if (response.data.resultCode == 1) {
-            console.log(response);
+            alert("操作成功");
+            location.reload();
+          }else{
+            this.$message.success("操作失败");
           }
         })
         .catch((error) => {
