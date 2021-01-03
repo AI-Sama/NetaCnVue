@@ -29,7 +29,7 @@
         </a-button>
       </div>
     </div>
-    <a-modal v-model="visible" title="拒绝理由" @ok="buttonclick(-1)">
+    <a-modal v-model="visible" title="拒绝理由" @ok="buttonclick(-1)" cancelText="取消" okText="确定"> 
       <a-textarea
       v-model="refusevar"
       placeholder="请输入拒绝理由"

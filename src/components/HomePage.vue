@@ -18,29 +18,41 @@
         <a-pagination simple :default-current="2" :total="50" />
       </div>
     </div>
-    <div class="gezhi">
+    <div class="gezhi" v-for="(card, index) in cardList">
       <div class="ciyu">
-        <ruby> 文<rt>wen</rt>字<rt>zi</rt></ruby>
+        <ruby>
+          {{ card.netaWord }}
+          <rt>{{ card.pinyin }}</rt>
+        </ruby>
       </div>
-
-      <div class="jiaming">あいうえお</div>
+      <div class="jiaming">{{ card.katakana }}</div>
     </div>
-    <div class="gezhi"></div>
-    <div class="gezhi"></div>
-    <div class="gezhi"></div>
-    <div class="gezhi"></div>
-    <div class="gezhi"></div>
-    <div class="gezhi"></div>
-
-    <div class="gezhi"></div>
-    <div class="gezhi"></div>
-    <div class="gezhi"></div>
-
-    <div class="gezhi"></div>
-    <div class="gezhi"></div>
   </div>
 </template>
-
+<script>
+export default {
+  data() {
+    return {
+      cardList: [],
+    };
+  },
+  mounted() {
+    this.$axios({
+      method: "get",
+      url: "http://localhost:8080/neta/selectNeta",
+      params: {
+        statusCode: 1,
+      },
+    }).then((response) => {
+      if (response.data.resultCode == 1) {
+        this.cardList = response.data.resultData;
+        console.log(this.cardList);
+      }
+    });
+  },
+  methods: {},
+};
+</script>
 <style>
 #center {
   display: flex;
