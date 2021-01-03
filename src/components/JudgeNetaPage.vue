@@ -5,13 +5,17 @@
         <a-checkbox v-model="qx" @click="allcheck"> 全选 </a-checkbox>
       </div>
       <div style="margin: 20px">
-        <a-button type="primary" size="small"> 通过 </a-button>
+        <a-button type="primary" size="small" @click="pass"> 通过 </a-button>
       </div>
       <div>
         <a-button type="primary" size="small"> 拒绝 </a-button>
       </div>
     </div>
-    <div class="danyuange" v-for="(w, index) in wordList">
+    <div
+      class="danyuange"
+      v-for="(w, index) in wordList"
+      @click="dyclick(index)"
+    >
       <a-checkbox v-model="checkList[index]" @change="onChange(index)">
       </a-checkbox>
       <div class="word">
@@ -53,6 +57,37 @@ export default {
     });
   },
   methods: {
+    pass() {
+      let sub = [];
+      let y = 0;
+      for (let x = 0; x < this.checkList.length; x++) {
+        if (this.checkList[x]) {
+          this.wordList[x].netaStatus = 1;
+          sub[y++] = this.wordList[x];
+        }
+      }
+      this.$axios({
+        method: "post",
+        url: "http://localhost:8080/neta/updateNetaStatus",
+        data: sub,
+      }).then((response) => {
+        if (response.data.resultCode == 1) {
+          this.$message.success("操作成功");
+          for (let x = 0; x < this.checkList.length; x++) {
+            if (this.checkList[x]) {
+              this.checkList.splice(x, 1);
+              this.wordList.splice(x, 1);
+              --x;
+            }
+          }
+          this.$forceUpdate();
+        }
+      });
+    },
+    dyclick(index) {
+      this.checkList[index] = !this.checkList[index];
+      this.$forceUpdate();
+    },
     jumpDetails(id) {
       this.$router.push({
         path: "/ShowPage",
@@ -77,7 +112,6 @@ export default {
   justify-content: start;
   align-items: flex-start;
   width: 50%;
-  /* background-color: blue; */
   flex-wrap: wrap;
   margin-top: 20px;
 }
@@ -86,7 +120,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  /* width: 23%; */
   width: 48%;
   height: 50px;
   margin: 1%;
