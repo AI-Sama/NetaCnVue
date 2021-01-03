@@ -18,7 +18,11 @@
         <a-pagination simple :default-current="2" :total="50" />
       </div>
     </div>
-    <div class="gezhi" v-for="(card, index) in cardList">
+    <div
+      class="gezhi"
+      v-for="(card, index) in cardList"
+      @click="jumpneta(card.netaId)"
+    >
       <div class="ciyu">
         <ruby>
           {{ card.netaWord }}
@@ -50,7 +54,16 @@ export default {
       }
     });
   },
-  methods: {},
+  methods: {
+    jumpneta(id) {
+      this.$router.push({
+        path: "/ShowPage",
+        query: {
+          netaId: id,
+        },
+      });
+    },
+  },
 };
 </script>
 <style>
@@ -60,13 +73,11 @@ export default {
   justify-content: center;
   align-items: flex-start;
   width: 70%;
-  /* background-color: blue; */
   flex-wrap: wrap;
   margin-top: 20px;
 }
 
 .gezhi {
-  /* width: 23%; */
   width: 300px;
   height: 180px;
   margin: 20px;
@@ -76,6 +87,7 @@ export default {
   background-color: white;
 }
 .gezhi:hover {
+  cursor: pointer;
   color: red;
   box-shadow: 0 12px 25px 0 rgba(0, 0, 0, 0.2);
 }

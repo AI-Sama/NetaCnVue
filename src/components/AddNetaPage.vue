@@ -351,6 +351,7 @@ export default {
   line-height: 2.5em;
 }
 .ybzimu:hover {
+  cursor: pointer;
   border: #1890ff 1px solid;
   color: #1890ff;
 }
