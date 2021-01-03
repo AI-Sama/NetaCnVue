@@ -5,10 +5,10 @@
         <a-checkbox v-model="qx" @click="allcheck"> 全选 </a-checkbox>
       </div>
       <div style="margin: 20px">
-        <a-button type="primary" size="small" @click="pass"> 通过 </a-button>
+        <a-button type="primary" size="small" @click="buttonclick(1)"> 通过 </a-button>
       </div>
       <div>
-        <a-button type="primary" size="small"> 拒绝 </a-button>
+        <a-button type="primary" size="small" @click="showModal"> 拒绝 </a-button>
       </div>
     </div>
     <div
@@ -29,12 +29,21 @@
         </a-button>
       </div>
     </div>
+    <a-modal v-model="visible" title="拒绝理由" @ok="buttonclick(-1)">
+      <a-textarea
+      v-model="refusevar"
+      placeholder="请输入拒绝理由"
+      :auto-size="{ minRows: 3, maxRows: 5 }"
+    />
+    </a-modal>
   </div>
 </template>
 <script>
 export default {
   data() {
     return {
+      refusevar:"",
+      visible:false,
       qx: false,
       wordList: [],
       checkList: [],
@@ -57,15 +66,22 @@ export default {
     });
   },
   methods: {
-    pass() {
+    showModal(){
+      this.visible=true;
+    },
+    buttonclick(status) {
       let sub = [];
       let y = 0;
       for (let x = 0; x < this.checkList.length; x++) {
         if (this.checkList[x]) {
-          this.wordList[x].netaStatus = 1;
+          this.wordList[x].netaStatus = status;
+          if(status==-1){
+              this.wordList[x].reason=this.refusevar;
+          }
           sub[y++] = this.wordList[x];
         }
       }
+      console.log(sub);
       this.$axios({
         method: "post",
         url: "http://localhost:8080/neta/updateNetaStatus",
@@ -74,7 +90,7 @@ export default {
         if (response.data.resultCode == 1) {
           this.$message.success("操作成功");
           for (let x = 0; x < this.checkList.length; x++) {
-            if (this.checkList[x]) {
+            if (this.checkList[x]) {  
               this.checkList.splice(x, 1);
               this.wordList.splice(x, 1);
               --x;
@@ -82,6 +98,7 @@ export default {
           }
           this.$forceUpdate();
         }
+        this.visible=false;
       });
     },
     dyclick(index) {
