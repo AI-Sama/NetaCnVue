@@ -10,8 +10,8 @@ import axios from 'axios';
 Vue.prototype.$axios = axios;
 Vue.prototype.$md5 = md5;
 Vue.prototype.islogin = false;
-Vue.prototype.lan = 1;
-Vue.prototype.pb = 1;
+Vue.prototype.lan = false;
+Vue.prototype.pb = true;
 Vue.use(Antd);
 Vue.config.productionTip = false
 axios.interceptors.request.use(

@@ -28,7 +28,13 @@
     </div>
     <a-divider />
     <div>
-      <a-tag v-for="(tag,index) in tags" :color="tagcolor[Math.round(Math.random()*7)]" :key="tag"> {{tag}}</a-tag>
+      <a-tag
+        v-for="(tag, index) in tags"
+        :color="tagcolor[Math.round(Math.random() * 7)]"
+        :key="tag"
+      >
+        {{ tag }}</a-tag
+      >
     </div>
     <a-divider />
     <div>
@@ -64,8 +70,17 @@
 export default {
   data() {
     return {
-      co:"#2db7f5",
-      tagcolor:["#74b9ff","#0984e3","#ff7675","#d63031","#6ab04c","#C4E538","#FFC312","#FEA47F"],
+      co: "#2db7f5",
+      tagcolor: [
+        "#74b9ff",
+        "#0984e3",
+        "#ff7675",
+        "#d63031",
+        "#6ab04c",
+        "#C4E538",
+        "#FFC312",
+        "#FEA47F",
+      ],
       tags: [],
       netaData: {},
       activeKey: ["1", "2"],
@@ -86,7 +101,11 @@ export default {
         let arr = this.netaData.labels;
         for (let x = 0; x < arr.length; x++) {
           let cnjp = arr[x].split("|");
-          this.tags[x] = cnjp[this.lan] == "null" ? cnjp[0] : cnjp[this.lan];
+          if (this.lan) {
+            this.tags[x] = cnjp[1] == "null" ? cnjp[0] : cnjp[1];
+          } else {
+            this.tags[x] = cnjp[0];
+          }
         }
       }
     });

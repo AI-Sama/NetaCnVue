@@ -5,7 +5,7 @@
         <a-input v-model="form.netaWord" />
       </a-form-model-item>
 
-      <a-form-model-item label="拼音" required>
+      <a-form-model-item label="拼音">
         <a-input
           id="pinyin"
           v-model="form.pinyin"
@@ -19,7 +19,7 @@
           </div>
         </div>
       </a-form-model-item>
-      <a-form-model-item label="音译假名" required>
+      <a-form-model-item label="音译假名">
         <a-input v-model="form.katakana" />
       </a-form-model-item>
       <a-form-model-item label="标签">

@@ -7,22 +7,32 @@
           style="width: 120px"
           @change="handleChange"
         >
-          <a-select-option value="jack"> 按上传时间 </a-select-option>
-          <a-select-option value="lucy"> 按诞生时间 </a-select-option>
+          <a-select-option value="jack"> 按更新时间 </a-select-option>
+          <a-select-option value="lucy"> 按出现时间 </a-select-option>
           <a-select-option value="Yiminghe"> 按热度 </a-select-option>
         </a-select>
         &nbsp;&nbsp;&nbsp;
       </div>
-      <a-input-search placeholder="input search text" style="width: 50%" @search="onSearch" />
-      <!-- <div>
-        <a-pagination simple :default-current="2" :total="50" />
-      </div> -->
-      
+      <div style="width: 50%">
+        <a-input-search
+          placeholder="input search text"
+          style="width: 100%"
+          @search="onSearch"
+        />
+      </div>
+      <div style="margin-left:15px">
+        <a-switch
+          checked-children="限制开启"
+          un-checked-children="限制解除"
+          :checked="this.pb"
+        />
+      </div>
     </div>
     <div
       class="gezhi"
       v-for="(card, index) in cardList"
       @click="jumpneta(card.netaId)"
+      :title="card.netaWord"
     >
       <div class="jg">
         <div class="jgicon" v-if="card.wordShield">
@@ -36,6 +46,9 @@
         </ruby>
       </div>
       <div class="jiaming">{{ card.katakana }}</div>
+    </div>
+    <div style="margin-top:15px;width:50%;text-align:center">
+      <a-pagination  hideOnSinglePage=true pageSize=9 :total="500"  />
     </div>
   </div>
 </template>
@@ -78,7 +91,7 @@ export default {
   flex-direction: row;
   justify-content: center;
   align-items: flex-start;
-  width: 70%;
+  width: 60%;
   flex-wrap: wrap;
   margin-top: 20px;
 }
@@ -121,13 +134,12 @@ export default {
   line-height: 100px;
   text-align: center;
   overflow: hidden;
-  /* white-space: nowrap;
-  text-overflow: ellipsis; */
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .jiaming {
   color: #909399;
-  width: 90%;
-  margin: auto;
+  width: 100%;
   height: 30%;
   font-size: 1em;
   text-align: center;
