@@ -77,6 +77,9 @@
               <a @click="jump('/UserInfoPage')"> 个人资料 </a>
             </div>
             <div class="user_operate">
+              <a @click="jump('/UserManage')"> 用户管理 </a>
+            </div>
+            <div class="user_operate">
               <a @click="jump('/JudgeNetaPage')"> 审核页面 </a>
             </div>
             <div class="user_operate">

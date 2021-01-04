@@ -165,7 +165,7 @@ export default {
       labelCol: { span: 4 },
       wrapperCol: { span: 14 },
       form: {
-        wordShield: false,
+        wordShield: true,
         netaWord: "",
         pinyin: "",
         katakana: "",

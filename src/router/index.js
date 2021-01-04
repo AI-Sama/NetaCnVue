@@ -5,6 +5,7 @@ import AddNetaPage from '@/components/AddNetaPage'
 import ShowPage from '@/components/ShowPage'
 import UserInfoPage from '@/components/UserInfoPage'
 import JudgeNetaPage from '@/components/JudgeNetaPage'
+import UserManage from '@/components/UserManage'
 Vue.use(Router)
 
 export default new Router({
@@ -34,6 +35,11 @@ export default new Router({
       path: '/JudgeNetaPage',
       name: 'JudgeNetaPage',
       component: JudgeNetaPage
+    },
+    {
+      path: '/UserManage',
+      name: 'UserManage',
+      component: UserManage
     }
   ]
 })
