@@ -50,16 +50,16 @@
           <a-menu-item @click="caidan" key="tags">
             <a-icon type="tags" />标签
           </a-menu-item>
+          <a-menu-item @click="caidan" key="mail">
+            <a-icon type="mail" />意见反馈
+          </a-menu-item>
           <a-menu-item @click="caidan" key="plus">
             <a-icon type="plus" />新增
           </a-menu-item>
         </a-menu>
       </div>
       <div>
-        <a-button icon="global">日语</a-button>
-        <a-button icon="stop">限制</a-button>
-      </div>
-      <div>
+        <a-button icon="global" size="small">日语</a-button>
         <a-popover v-if="this.islogin" placement="bottom">
           <template slot="title">
             <div style="color: red; text-align: center">
@@ -91,6 +91,19 @@
           ><a-avatar :size="63" icon="user" :src="userInfo.headImg"
         /></a>
       </div>
+      <a-modal
+        v-model="yjfk"
+        title="意见反馈"
+        @ok="subyj"
+        cancelText="取消"
+        okText="确定"
+      >
+        <a-textarea
+          v-model="yjtext"
+          placeholder=""
+          :auto-size="{ minRows: 3, maxRows: 5 }"
+        />
+      </a-modal>
     </div>
   </div>
 </template>
@@ -99,6 +112,8 @@ export default {
   props: [],
   data() {
     return {
+      yjtext: "",
+      yjfk: false,
       userInfo: {},
       userAccount: "",
       password: "",
@@ -130,6 +145,11 @@ export default {
     }
   },
   methods: {
+    subyj() {
+      this.yjfk = false;
+      alert("提交");
+      this.yjtext = "";
+    },
     jump(page) {
       this.$router.push({ path: page });
     },
@@ -153,7 +173,7 @@ export default {
         })
           .then((response) => {
             if (response.data.resultCode == 1) {
-             alert("注册成功");
+              alert("注册成功");
             } else if (response.data.resultCode == 0) {
               alert("该账号已被注册");
             }
@@ -204,6 +224,8 @@ export default {
         this.$router.push({ path: "/" });
       } else if (e["key"] == "plus") {
         this.$router.push({ path: "/AddNetaPage" });
+      } else if (e["key"] == "mail") {
+        this.yjfk = true;
       }
     },
     quxiao() {

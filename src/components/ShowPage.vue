@@ -132,7 +132,7 @@ export default {
 }
 .warning {
   margin-right: 0.5em;
-  color: white;
+  color: #2d3436;
   font-weight: bold;
   text-align: center;
   font-size: 1em;

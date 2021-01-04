@@ -23,6 +23,11 @@
       v-for="(card, index) in cardList"
       @click="jumpneta(card.netaId)"
     >
+      <div class="jg">
+        <div class="jgicon" v-if="card.wordShield">
+          <a-icon type="warning" />
+        </div>
+      </div>
       <div class="ciyu">
         <ruby>
           {{ card.netaWord }}
@@ -91,9 +96,23 @@ export default {
   color: red;
   box-shadow: 0 12px 25px 0 rgba(0, 0, 0, 0.2);
 }
-
+.jg {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 22%;
+}
+.jgicon {
+  margin-right: 1em;
+  background-color: #d63031;
+  color: #2d3436;
+  text-align: center;
+  line-height: 2em;
+  width: 2em;
+  height: 2em;
+  border-radius: 0 0 5px 5px;
+}
 .ciyu {
-  margin-top: 15%;
   width: 100%;
   height: 45%;
   font-size: 2.8em;
@@ -106,7 +125,7 @@ export default {
 .jiaming {
   color: #909399;
   width: 100%;
-  height: 28%;
+  height: 30%;
   font-size: 0.8em;
   text-align: center;
   overflow: hidden;
