@@ -1,6 +1,6 @@
 <template>
   <div class="center">
-    <div class="shaixuan">
+    <div class="shenhe">
       <div>
         <a-checkbox v-model="qx" @click="allcheck"> 全选 </a-checkbox>
       </div>
@@ -160,7 +160,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.shaixuan {
+.shenhe {
   display: flex;
   align-items: center;
   padding: 20px;

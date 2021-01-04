@@ -28,10 +28,18 @@
     </div>
     <a-divider />
     <div>
-      <a-tag color="#f50"> #f50 </a-tag>
-      <a-tag color="#2db7f5"> #2db7f5 </a-tag>
-      <a-tag color="#87d068"> #87d068 </a-tag>
-      <a-tag color="#108ee9"> #108ee9 </a-tag>
+      <a-tag v-for="(tag,index) in tags" :color="tagcolor[Math.round(Math.random()*7)]" :key="tag"> {{tag}}</a-tag>
+    </div>
+    <a-divider />
+    <div>
+      <a-collapse v-model="activeKey">
+        <a-collapse-panel key="2" header="日语释义">
+          <p>{{ netaData.jpExplanation }}</p>
+        </a-collapse-panel>
+        <a-collapse-panel key="1" header="中文释义">
+          <p>{{ netaData.cnExplanation }}</p>
+        </a-collapse-panel>
+      </a-collapse>
     </div>
     <a-divider />
     <div v-if="netaData.netaDate">
@@ -40,16 +48,6 @@
     </div>
     <div v-if="!netaData.netaDate">出现日期：不明</div>
     <a-divider />
-    <div>
-      <a-collapse v-model="activeKey">
-        <a-collapse-panel key="1" header="中文释义">
-          <p>{{ netaData.cnExplanation }}</p>
-        </a-collapse-panel>
-        <a-collapse-panel key="2" header="日语释义">
-          <p>{{ netaData.jpExplanation }}</p>
-        </a-collapse-panel>
-      </a-collapse>
-    </div>
     <div class="anniu">
       <div>
         <a-button icon="edit">修改</a-button>
@@ -66,6 +64,9 @@
 export default {
   data() {
     return {
+      co:"#2db7f5",
+      tagcolor:["#74b9ff","#0984e3","#ff7675","#d63031","#6ab04c","#C4E538","#FFC312","#FEA47F"],
+      tags: [],
       netaData: {},
       activeKey: ["1", "2"],
     };
@@ -82,6 +83,11 @@ export default {
       if (response.data.resultCode == 1) {
         console.log(response);
         this.netaData = response.data.resultData;
+        let arr = this.netaData.labels;
+        for (let x = 0; x < arr.length; x++) {
+          let cnjp = arr[x].split("|");
+          this.tags[x] = cnjp[this.lan] == "null" ? cnjp[0] : cnjp[this.lan];
+        }
       }
     });
   },
@@ -91,7 +97,7 @@ export default {
     },
   },
   methods: {
-    back(){
+    back() {
       this.$router.go(-1);
     },
   },
@@ -124,7 +130,7 @@ export default {
   border-style: none solid solid solid;
   border-radius: 0 0 5px 5px;
 }
-.leftButton:hover{
+.leftButton:hover {
   cursor: pointer;
   color: #40a9ff;
   border: 1px solid#40a9ff;
@@ -158,12 +164,12 @@ export default {
 }
 .wenzi {
   color: black;
-  font-size: 4em;
+  font-size: 3.5em;
   font-weight: bold;
 }
 .katakana {
   color: black;
-  font-size: 1em;
+  font-size: 1.3em;
   font-weight: bold;
 }
 .anniu {

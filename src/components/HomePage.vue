@@ -1,7 +1,6 @@
 <template>
   <div id="center">
     <div class="shaixuan">
-      <div>排序方式:&nbsp;&nbsp;&nbsp;</div>
       <div>
         <a-select
           default-value="lucy"
@@ -14,9 +13,11 @@
         </a-select>
         &nbsp;&nbsp;&nbsp;
       </div>
-      <div>
+      <a-input-search placeholder="input search text" style="width: 50%" @search="onSearch" />
+      <!-- <div>
         <a-pagination simple :default-current="2" :total="50" />
-      </div>
+      </div> -->
+      
     </div>
     <div
       class="gezhi"
@@ -113,20 +114,22 @@ export default {
   border-radius: 0 0 5px 5px;
 }
 .ciyu {
-  width: 100%;
+  margin: auto;
+  width: 90%;
   height: 45%;
   font-size: 2.8em;
   line-height: 100px;
   text-align: center;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  /* white-space: nowrap;
+  text-overflow: ellipsis; */
 }
 .jiaming {
   color: #909399;
-  width: 100%;
+  width: 90%;
+  margin: auto;
   height: 30%;
-  font-size: 0.8em;
+  font-size: 1em;
   text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -136,6 +139,7 @@ export default {
 .shaixuan {
   padding: 20px;
   display: flex;
+  justify-content: center;
   align-items: center;
   width: 1000px;
   height: 50px;
