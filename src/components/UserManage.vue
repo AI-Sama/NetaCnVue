@@ -37,7 +37,7 @@
       <div
         style="margin-top: 15px; margin: auto; width: 50%; text-align: center"
       >
-        <a-pagination hideOnSinglePage="true" pageSize="10" :total="total" />
+        <a-pagination  :pageSize="pageSize" :total="total" />
       </div>
     </div>
   </div>
@@ -48,19 +48,18 @@ export default {
     return {
       loginPower: 0,
       userinfos: [],
-      pageNum: 0,
+      pageNum: 1,
       pageSize: 10,
       total: 0,
     };
   },
   mounted() {
-    let u = JSON.parse(sessionStorage.getItem("user"));
-    this.loginPower = u.userPower;
+    this.loginPower = this.$root.userInfo.userPower;
     this.$axios({
       method: "get",
       url: "http://localhost:8080/user/getUsers",
       params: {
-        pageNum: this.pageNum + 1,
+        pageNum: this.pageNum,
         pageSize: this.pageSize,
       },
     }).then((response) => {

@@ -2,7 +2,9 @@
   <div class="topmenu">
     <div class="loginPage" v-if="loginPage">
       <div>
+        
         <a-tabs default-active-key="1" @change="loginCallback">
+         
           <a-tab-pane key="1" tab="ログイン"> </a-tab-pane>
           <a-tab-pane key="2" tab="アカウント作成" force-render> </a-tab-pane>
         </a-tabs>
@@ -45,7 +47,7 @@
       <div>
         <a-menu v-model="current" mode="horizontal">
           <a-menu-item @click="caidan" key="home">
-            <a-icon type="home" />主页
+            <a-icon type="home" />主页 
           </a-menu-item>
           <a-menu-item @click="caidan" key="tags">
             <a-icon type="tags" />标签
@@ -60,15 +62,15 @@
       </div>
       <div>
         <a-button icon="global" size="small">日语</a-button>
-        <a-popover v-if="this.islogin" placement="bottom">
+        <a-popover v-if="this.$root.islogin" placement="bottom">
           <template slot="title">
             <div style="color: red; text-align: center">
               Lv.
-              {{ userInfo.userLevel }}
+              {{ this.$root.userInfo.userLevel }}
               {{
-                userInfo.userName == null
-                  ? userInfo.userAccount
-                  : userInfo.userName
+                this.$root.userInfo.userName == null
+                  ? this.$root.userInfo.userAccount
+                  : this.$root.userInfo.userName
               }}
             </div>
           </template>
@@ -87,11 +89,11 @@
             </div>
           </template>
           <a @click="headClick"
-            ><a-avatar :size="63" icon="user" :src="userInfo.headImg"
+            ><a-avatar :size="63" icon="user" :src="this.$root.userInfo.headImg"
           /></a>
         </a-popover>
-        <a v-if="!this.islogin" @click="headClick"
-          ><a-avatar :size="63" icon="user" :src="userInfo.headImg"
+        <a v-if="!this.$root.islogin" @click="headClick"
+          ><a-avatar :size="63" icon="user" :src="this.$root.userInfo.headImg"
         /></a>
       </div>
       <a-modal
@@ -117,7 +119,6 @@ export default {
     return {
       yjtext: "",
       yjfk: false,
-      userInfo: {},
       userAccount: "",
       password: "",
       lgText: "登录",
@@ -125,27 +126,8 @@ export default {
       loginPage: false,
     };
   },
-  mounted() {
-    if (!sessionStorage.getItem("user")) {
-      this.$axios({
-        method: "get",
-        url: "http://localhost:8080/user/getUserInfo",
-      }).then((response) => {
-        if (response.data.resultCode == 1) {
-          sessionStorage.setItem(
-            "user",
-            JSON.stringify(response.data.resultData)
-          );
-          this.userInfo = response.data.resultData;
-          this.islogin = true;
-          this.$forceUpdate();
-        }
-      });
-    } else {
-      this.userInfo = JSON.parse(sessionStorage.getItem("user"));
-      this.islogin = true;
-      this.$forceUpdate();
-    }
+  created() {
+    
   },
   methods: {
     subyj() {
@@ -158,8 +140,7 @@ export default {
     },
     login_out() {
       localStorage.removeItem("mydata");
-      sessionStorage.removeItem("user");
-      this.islogin = false;
+      this.$root.islogin = false;
       this.$router.push({ path: "/" });
       location.reload();
     },
@@ -198,14 +179,11 @@ export default {
           .then((response) => {
             if (response.data.resultCode == 1) {
               this.$message.success("登录成功");
-              sessionStorage.setItem(
-                "user",
-                JSON.stringify(response.data.resultData)
-              );
               localStorage.setItem("mydata", response.data.resultData.spare1);
-              this.userInfo = response.data.resultData;
+              this.$root.userInfo = response.data.resultData;
+              this.$root.pb = this.$root.userInfo.wordLimit == 1 ? true : false;
+              this.$root.islogin = true;
               this.loginPage = false;
-              this.islogin = true;
             } else if (response.data.resultCode == 0) {
               this.$message.error("账号或密码错误");
               this.password = "";
@@ -235,7 +213,7 @@ export default {
       this.loginPage = false;
     },
     headClick() {
-      if (this.islogin == false) {
+      if (this.$root.islogin == false) {
         this.loginPage = true;
       }
     },

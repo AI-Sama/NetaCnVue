@@ -96,7 +96,6 @@ export default {
       },
     }).then((response) => {
       if (response.data.resultCode == 1) {
-        console.log(response);
         this.netaData = response.data.resultData;
         let arr = this.netaData.labels;
         for (let x = 0; x < arr.length; x++) {

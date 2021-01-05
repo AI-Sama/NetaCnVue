@@ -52,10 +52,7 @@ export default {
   mounted() {
     this.$axios({
       method: "get",
-      url: "http://localhost:8080/neta/selectNeta",
-      params: {
-        statusCode: 0,
-      },
+      url: "http://localhost:8080/neta/selectJudgeNetas",
     }).then((response) => {
       if (response.data.resultCode == 1) {
         this.wordList = response.data.resultData;

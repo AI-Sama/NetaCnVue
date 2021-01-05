@@ -234,7 +234,6 @@ export default {
       });
     },
     showDrawer() {
-      console.log(this.yb);
       this.drawer_visible = true;
       this.$axios({
         method: "get",
@@ -251,7 +250,6 @@ export default {
     },
     handleClose(removedTag) {
       const tags = this.tags.filter((tag) => tag !== removedTag);
-      console.log(tags);
       this.tags = tags;
     },
     showInput() {
@@ -273,7 +271,6 @@ export default {
       if (inputValue && tags.indexOf(inputValue) === -1) {
         tags = [...tags, inputValue];
       }
-      //   console.log(tags);
       Object.assign(this, {
         tags,
         inputVisible: false,
@@ -301,7 +298,6 @@ export default {
         cnExplanation: this.form.cnExplanation,
         jpExplanation: this.form.jpExplanation,
       };
-      console.log("submit!", this.form);
       this.$axios({
         method: "post",
         url: "http://localhost:8080/neta/addNeta",

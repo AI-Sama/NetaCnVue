@@ -79,28 +79,14 @@ export default {
       },
     };
   },
-  mounted() {
-    if (!sessionStorage.getItem("user")) {
-      this.$axios({
-        method: "get",
-        url: "http://localhost:8080/user/getUserInfo",
-      }).then((response) => {
-        if (response.data.resultCode == 1) {
-          sessionStorage.setItem(
-            "user",
-            JSON.stringify(response.data.resultData)
-          );
-          this.$forceUpdate();
-          this.data_push();
-        }
-      });
-    } else {
+  created() {
+    if (this.$root.userInfo.userId != null) {
       this.data_push();
     }
   },
   methods: {
     data_push() {
-      let user = JSON.parse(sessionStorage.getItem("user"));
+      let user = this.$root.userInfo;
       this.user_form.userAccount = user.userAccount;
       if (!user.userName) {
         this.user_form.userName = user.userAccount;
@@ -129,9 +115,14 @@ export default {
         .then((response) => {
           if (response.data.resultCode == 1) {
             this.$message.success("修改成功");
-            sessionStorage.removeItem("user");
+            this.$root.userInfo.userName = this.user_form.userName;
+            this.$root.userInfo.wordLimit = this.user_form.wordLimit;
+            this.$root.userInfo.userLanguage = this.user_form.userLanguage;
+            this.$root.pb = this.user_form.wordLimit;
+            this.$root.lan = this.user_form.userLanguage;
             this.is_edit = false;
             this.disalbed = true;
+            this.$forceUpdate();
           } else if (response.data.resultCode == 0) {
           }
         })

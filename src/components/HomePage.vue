@@ -3,28 +3,29 @@
     <div class="shaixuan">
       <div>
         <a-select
-          default-value="lucy"
+          default-value="0"
           style="width: 120px"
-          @change="handleChange"
+          @change="selectStatusChange"
         >
-          <a-select-option value="jack"> 按更新时间 </a-select-option>
-          <a-select-option value="lucy"> 按出现时间 </a-select-option>
-          <a-select-option value="Yiminghe"> 按热度 </a-select-option>
+          <a-select-option value="0"> 按更新时间 </a-select-option>
+          <a-select-option value="1"> 按出现时间 </a-select-option>
+          <a-select-option value="2"> 按热度 </a-select-option>
         </a-select>
         &nbsp;&nbsp;&nbsp;
       </div>
       <div style="width: 50%">
         <a-input-search
-          placeholder="input search text"
+          placeholder="输入查找词语"
           style="width: 100%"
-          @search="onSearch"
+          v-model="selectWord"
+          @search="searchNeta"
         />
       </div>
-      <div style="margin-left:15px">
+      <div style="margin-left: 15px">
         <a-switch
           checked-children="限制开启"
           un-checked-children="限制解除"
-          :checked="this.pb"
+          :checked="this.$root.pb"
         />
       </div>
     </div>
@@ -47,8 +48,8 @@
       </div>
       <div class="jiaming">{{ card.katakana }}</div>
     </div>
-    <div style="margin-top:15px;width:50%;text-align:center">
-      <a-pagination  hideOnSinglePage=true pageSize=9 :total="500"  />
+    <div style="margin-top: 15px; width: 50%; text-align: center">
+      <a-pagination :pageSize="pageSize" :total="1" />
     </div>
   </div>
 </template>
@@ -56,24 +57,40 @@
 export default {
   data() {
     return {
+      pageSize: 9,
+      pageNum: 1,
+      status: 0,
+      selectWord: "",
+      total: 0,
       cardList: [],
     };
   },
   mounted() {
+    let obj = {
+      pageSize: 9,
+      pageNum: this.pageNum,
+      status: this.status,
+      pb: this.$root.pb ? 1 : 0,
+      selectWord: this.selectWord,
+    };
     this.$axios({
       method: "get",
-      url: "http://localhost:8080/neta/selectNeta",
-      params: {
-        statusCode: 1,
-      },
+      url: "http://localhost:8080/neta/selectNetas",
+      params: obj,
     }).then((response) => {
       if (response.data.resultCode == 1) {
-        this.cardList = response.data.resultData;
-        console.log(this.cardList);
+        this.cardList = response.data.resultData.data;
+        this.total = response.data.resultData.total;
       }
     });
   },
   methods: {
+    searchNeta() {
+      alert(this.selectWord);
+    },
+    selectStatusChange(key) {
+      this.status = key;
+    },
     jumpneta(id) {
       this.$router.push({
         path: "/ShowPage",
