@@ -1,9 +1,9 @@
 <template>
   <div class="b_page">
     <div class="up_user">
-      <div class="leftButton" @click="back">
+      <!-- <div class="leftButton" @click="back">
         <a-icon type="left" />
-      </div>
+      </div> -->
       <div style="display: flex">
         <div class="warning" v-if="netaData.wordShield">
           <a-icon type="warning" />
@@ -132,11 +132,11 @@ export default {
 }
 .up_user {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   width: 100%;
   height: 3em;
 }
-.leftButton {
+/* .leftButton {
   margin-right: 0.5em;
   font-weight: bold;
   text-align: center;
@@ -153,7 +153,7 @@ export default {
   color: #40a9ff;
   border: 1px solid#40a9ff;
   border-style: none solid solid solid;
-}
+} */
 .warning {
   margin-right: 0.5em;
   color: #2d3436;

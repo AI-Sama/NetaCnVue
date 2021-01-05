@@ -48,8 +48,13 @@
       </div>
       <div class="jiaming">{{ card.katakana }}</div>
     </div>
-    <div style="margin-top: 15px; width: 50%; text-align: center">
-      <a-pagination :pageSize="pageSize" :total="1" />
+    <div style="margin-top: 15px; width: 100%; text-align: center">
+      <a-pagination
+        v-model="this.$root.pageNum"
+        :pageSize="9"
+        :total="100"
+        @change="changePage"
+      />
     </div>
   </div>
 </template>
@@ -57,8 +62,6 @@
 export default {
   data() {
     return {
-      pageSize: 9,
-      pageNum: 1,
       status: 0,
       selectWord: "",
       total: 0,
@@ -66,27 +69,36 @@ export default {
     };
   },
   mounted() {
-    let obj = {
-      pageSize: 9,
-      pageNum: this.pageNum,
-      status: this.status,
-      pb: this.$root.pb ? 1 : 0,
-      selectWord: this.selectWord,
-    };
-    this.$axios({
-      method: "get",
-      url: "http://localhost:8080/neta/selectNetas",
-      params: obj,
-    }).then((response) => {
-      if (response.data.resultCode == 1) {
-        this.cardList = response.data.resultData.data;
-        this.total = response.data.resultData.total;
-      }
-    });
+    this.getNeta();
   },
   methods: {
+    getNeta() {
+      let obj = {
+        pageSize: 9,
+        pageNum: this.$root.pageNum,
+        status: this.status,
+        pb: this.$root.pb ? 1 : 0,
+        selectWord: this.selectWord,
+      };
+      console.log(obj);
+      this.$axios({
+        method: "get",
+        url: "http://localhost:8080/neta/selectNetas",
+        params: obj,
+      }).then((response) => {
+        if (response.data.resultCode == 1) {
+          this.cardList = response.data.resultData.data;
+          this.total = response.data.resultData.total;
+        }
+      });
+    },
+    changePage(nowPage) {
+      this.$root.pageNum = nowPage;
+      this.getNeta();
+    },
     searchNeta() {
-      alert(this.selectWord);
+      this.$root.pageNum = 1;
+      this.getNeta();
     },
     selectStatusChange(key) {
       this.status = key;

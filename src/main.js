@@ -20,7 +20,6 @@ Vue.prototype.$getUserInfo = async function () {
       this.$root.islogin = true;
     }
   });
-  this.$forceUpdate();
 };
 Vue.use(Antd);
 Vue.config.productionTip = false
@@ -51,6 +50,7 @@ new Vue({
   data() {
     return {
       userInfo: {},
+      pageNum:1,
       pb: true,
       lan: false,
       islogin: false,
