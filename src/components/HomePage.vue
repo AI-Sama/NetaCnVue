@@ -50,7 +50,7 @@
     </div>
     <div style="margin-top: 15px; width: 100%; text-align: center">
       <a-pagination
-        v-model="this.$root.pageNum"
+        v-model="pageNum"
         :pageSize="9"
         :total="100"
         @change="changePage"
@@ -63,6 +63,7 @@ export default {
   props: ["loadComplete"],
   data() {
     return {
+      pageNum: this.$root.pageNum,
       status: 0,
       selectWord: "",
       total: 0,
@@ -105,11 +106,11 @@ export default {
     },
     changePage(nowPage) {
       this.$root.pageNum = nowPage;
-      this.getNeta();
+      this.init();
     },
     searchNeta() {
       this.$root.pageNum = 1;
-      this.getNeta();
+      this.init();
     },
     selectStatusChange(key) {
       this.status = key;
