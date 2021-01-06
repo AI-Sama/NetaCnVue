@@ -52,7 +52,7 @@
       <a-pagination
         v-model="pageNum"
         :pageSize="9"
-        :total="100"
+        :total="total"
         @change="changePage"
       />
     </div>
@@ -114,6 +114,7 @@ export default {
     },
     selectStatusChange(key) {
       this.status = key;
+      this.init();
     },
     jumpneta(id) {
       this.$router.push({

@@ -88,7 +88,9 @@ export default {
         }
       });
     },
-    clickButton(id) {},
+    clickButton(id) {
+        
+    },
   },
 };
 </script>
