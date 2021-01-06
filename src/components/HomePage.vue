@@ -60,6 +60,7 @@
 </template>
 <script>
 export default {
+  props: ["loadComplete"],
   data() {
     return {
       status: 0,
@@ -68,11 +69,22 @@ export default {
       cardList: [],
     };
   },
-  mounted() {
-    this.getNeta();
+  created() {
+    if (this.loadComplete) {
+      this.init();
+    }
+  },
+  watch: {
+    loadComplete: {
+      handler(val) {
+        if (val) {
+          this.init();
+        }
+      },
+    },
   },
   methods: {
-    getNeta() {
+    init() {
       let obj = {
         pageSize: 9,
         pageNum: this.$root.pageNum,
@@ -80,7 +92,6 @@ export default {
         pb: this.$root.pb ? 1 : 0,
         selectWord: this.selectWord,
       };
-      console.log(obj);
       this.$axios({
         method: "get",
         url: "http://localhost:8080/neta/selectNetas",

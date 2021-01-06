@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <TopMenuPage />
-    <router-view />
+    <router-view :loadComplete="this.$root.loadComplete"/>
   </div>
 </template>
 
@@ -12,11 +12,6 @@ export default {
   components: {
     TopMenuPage,
   },
-  data() {
-    return {};
-  },
-  mounted() {},
-  methods: {},
 };
 </script>
 

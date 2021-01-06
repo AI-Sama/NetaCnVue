@@ -65,6 +65,7 @@
 </template>
 <script>
 export default {
+  props: ["loadComplete"],
   data() {
     return {
       is_edit: false,
@@ -80,9 +81,18 @@ export default {
     };
   },
   created() {
-    if (this.$root.userInfo.userId != null) {
+    if (this.loadComplete) {
       this.data_push();
     }
+  },
+  watch: {
+    loadComplete: {
+      handler(val) {
+        if (val) {
+          this.data_push();
+        }
+      },
+    },
   },
   methods: {
     data_push() {

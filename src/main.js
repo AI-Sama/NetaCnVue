@@ -18,6 +18,7 @@ Vue.prototype.$getUserInfo = async function () {
       this.$root.userInfo = response.data.resultData;
       this.$root.pb = this.$root.userInfo.wordLimit == 1 ? true : false;
       this.$root.islogin = true;
+      this.$root.loadComplete = true;
     }
   });
 };
@@ -49,6 +50,7 @@ new Vue({
   },
   data() {
     return {
+      loadComplete:false,
       userInfo: {},
       pageNum:1,
       pb: true,

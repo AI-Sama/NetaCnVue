@@ -26,7 +26,9 @@
         </div>
         <div style="width: 30%">
           <div v-if="loginPower >= user.userPower">
-            <span v-if="loginPower > 5"><a>修改权限</a></span>
+            <span v-if="loginPower > 5" @click="clickButton(1)"
+              ><a clic>修改权限</a></span
+            >
             <span>|<a>禁止登陆</a>|</span>
             <span><a>禁止上传</a>|</span>
             <span><a>重置密码</a>|</span>
@@ -37,13 +39,19 @@
       <div
         style="margin-top: 15px; margin: auto; width: 50%; text-align: center"
       >
-        <a-pagination  :pageSize="pageSize" :total="total" />
+        <a-pagination :pageSize="pageSize" :total="total" />
       </div>
     </div>
   </div>
 </template>
 <script>
 export default {
+  props: ["loadComplete"],
+  created() {
+    if (this.loadComplete) {
+      this.init();
+    }
+  },
   data() {
     return {
       loginPower: 0,
@@ -53,21 +61,34 @@ export default {
       total: 0,
     };
   },
-  mounted() {
-    this.loginPower = this.$root.userInfo.userPower;
-    this.$axios({
-      method: "get",
-      url: "http://localhost:8080/user/getUsers",
-      params: {
-        pageNum: this.pageNum,
-        pageSize: this.pageSize,
+  watch: {
+    loadComplete: {
+      handler(val) {
+        if (val) {
+          this.init();
+        }
       },
-    }).then((response) => {
-      if (response.data.resultCode == 1) {
-        this.userinfos = response.data.resultData.data;
-        this.total = response.data.resultData.total;
-      }
-    });
+    },
+  },
+  methods: {
+    init() {
+      this.loginPower = this.$root.userInfo.userPower;
+      this.$axios({
+        method: "get",
+        url: "http://localhost:8080/user/getUsers",
+        params: {
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+        },
+      }).then((response) => {
+        if (response.data.resultCode == 1) {
+          this.userinfos = response.data.resultData.data;
+          this.total = response.data.resultData.total;
+          this.$forceUpdate();
+        }
+      });
+    },
+    clickButton(id) {},
   },
 };
 </script>
