@@ -139,6 +139,7 @@ export default {
       this.$router.push({ path: page });
     },
     login_out() {
+      JSON.stringify
       localStorage.removeItem("mydata");
       this.$root.islogin = false;
       this.$router.push({ path: "/" });
@@ -202,7 +203,7 @@ export default {
       if (e["key"] == "home") {
         this.$router.push({ path: "/" });
       } else if (e["key"] == "tags") {
-        this.$router.push({ path: "/" });
+        this.$router.push({ path: "/LabelPage" });
       } else if (e["key"] == "plus") {
         this.$router.push({ path: "/AddNetaPage" });
       } else if (e["key"] == "mail") {

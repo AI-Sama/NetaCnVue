@@ -25,7 +25,8 @@
         <a-switch
           checked-children="限制开启"
           un-checked-children="限制解除"
-          :checked="this.$root.pb"
+          v-model="switch_pb"
+          @change="onChange"
         />
       </div>
     </div>
@@ -50,7 +51,7 @@
     </div>
     <div style="margin-top: 15px; width: 100%; text-align: center">
       <a-pagination
-        v-model="pageNum"
+        v-model="this.$root.pageNum"
         :pageSize="9"
         :total="total"
         @change="changePage"
@@ -63,7 +64,7 @@ export default {
   props: ["loadComplete"],
   data() {
     return {
-      pageNum: this.$root.pageNum,
+      switch_pb: this.$root.pb,
       status: 0,
       selectWord: "",
       total: 0,
@@ -71,20 +72,18 @@ export default {
     };
   },
   created() {
-    if (this.loadComplete) {
-      this.init();
-    }
-  },
-  watch: {
-    loadComplete: {
-      handler(val) {
-        if (val) {
-          this.init();
-        }
-      },
-    },
+    this.init();
   },
   methods: {
+    onChange() {
+      if(!this.$root.islogin){
+        alert("请先登录");
+        this.switch_pb=!this.switch_pb;
+        return;
+      }
+      this.$root.pb = this.switch_pb;
+      this.init();
+    },
     init() {
       let obj = {
         pageSize: 9,
@@ -105,6 +104,7 @@ export default {
       });
     },
     changePage(nowPage) {
+     
       this.$root.pageNum = nowPage;
       this.init();
     },

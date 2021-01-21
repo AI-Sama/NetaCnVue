@@ -6,6 +6,7 @@ import ShowPage from '@/components/ShowPage'
 import UserInfoPage from '@/components/UserInfoPage'
 import JudgeNetaPage from '@/components/JudgeNetaPage'
 import UserManage from '@/components/UserManage'
+import LabelPage from '@/components/LabelPage'
 Vue.use(Router)
 
 export default new Router({
@@ -40,6 +41,11 @@ export default new Router({
       path: '/UserManage',
       name: 'UserManage',
       component: UserManage
+    },
+    {
+      path: '/LabelPage',
+      name: 'LabelPage',
+      component: LabelPage
     }
   ]
 })

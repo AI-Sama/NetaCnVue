@@ -16,10 +16,10 @@ Vue.prototype.$getUserInfo = async function () {
   }).then((response) => {
     if (response.data.resultCode == 1) {
       this.$root.userInfo = response.data.resultData;
-      this.$root.pb = this.$root.userInfo.wordLimit == 1 ? true : false;
+      // this.$root.pb = this.$root.userInfo.wordLimit == 1 ? true : false;
       this.$root.islogin = true;
-      this.$root.loadComplete = true;
     }
+    this.$root.loadComplete = true;
   });
 };
 Vue.use(Antd);
