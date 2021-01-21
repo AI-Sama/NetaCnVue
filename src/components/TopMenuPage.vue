@@ -136,6 +136,7 @@ export default {
       this.yjtext = "";
     },
     jump(page) {
+      this.current=[];
       this.$router.push({ path: page });
     },
     login_out() {
